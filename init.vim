@@ -14,28 +14,26 @@ if empty(glob($HOME.'/.config/nvim/autoload/plug.vim'))
 endif
 
 
-execute 'set runtimepath+=' . s:plug_dir
-call plug#begin(s:plug_dir)
+call plug#begin()
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'glepnir/lspsaga.nvim'
 call plug#end()
-PlugInstall | quit
 
 lua << EOF
 local lsi = require("nvim-lsp-installer")
 lsi.setup()
 local _, angularls = lsi.get_server("angularls")
 local _, tsserver = lsi.get_server("tsserver")
-
+local lspconfig = require("lspconfig")
 if angularls:is_installed() then
-	angularls:setup_lsp()
+	lspconfig["angularls"].setup(angularls:get_default_options())
 else
 	angularls:install()
 end
 
 if tsserver:is_installed() then
-	tsserver:setup_lsp()
+	lspconfig["tsserver"].setup(tsserver:get_default_options())
 else
 	tsserver:install()
 end
