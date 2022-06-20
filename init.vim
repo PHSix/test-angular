@@ -25,6 +25,7 @@ local lsi = require("nvim-lsp-installer")
 lsi.setup()
 local _, angularls = lsi.get_server("angularls")
 local _, tsserver = lsi.get_server("tsserver")
+local _, gopls = lsi.get_server("gopls")
 local lspconfig = require("lspconfig")
 if angularls:is_installed() then
 	lspconfig["angularls"].setup(angularls:get_default_options())
@@ -36,6 +37,13 @@ if tsserver:is_installed() then
 	lspconfig["tsserver"].setup(tsserver:get_default_options())
 else
 	tsserver:install()
+end
+
+
+if gopls:is_installed() then
+	lspconfig["gopls"].setup(gopls:get_default_options())
+else
+	gopls:install()
 end
 
 local saga = require 'lspsaga'
